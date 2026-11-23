@@ -1,0 +1,14 @@
+{
+  "model_name": "Decision Tree - Long Method",
+  "model_type": "DecisionTreeClassifier",
+  "feature_names": [
+    "nloc",
+    "parameter_count",
+    "branch_count"
+  ],
+  "threshold": 0.8800000000000003,
+  "trained_at": "2026-11-23T15:19:41+0700",
+  "dataset_rows": 53807,
+  "training_seconds": 4.845,
+  "split_protocol": "Holdout 20% berdasarkan repository. Repository pada data uji tidak digunakan untuk pemilihan hyperparameter atau pelatihan model."
+}

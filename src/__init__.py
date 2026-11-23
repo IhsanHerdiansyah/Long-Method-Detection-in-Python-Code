@@ -1,0 +1,2 @@
+"""CodeSmell Analyzer application package."""
+

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "benchmark": {
+    "path": "model_versions/V1/benchmark_snapshot.csv",
+    "rows": 16209,
+    "repositories": 24,
+    "sha256": "86522353bb523eb9980cbda137030b74e5a87529866e0e5fdc9b0a4d15828801"
+  },
+  "versions": [
+    {
+      "version": 1,
+      "label": "V1",
+      "description": "Dataset awal dan model pembanding",
+      "status": "frozen",
+      "directory": "model_versions/V1",
+      "created_at": "2026-11-23T15:19:41+0700",
+      "parent_version": null,
+      "training_rows": 37598,
+      "benchmark_rows": 16209,
+      "added_rows": 0,
+      "duplicates_skipped": 0,
+      "benchmark_overlap_skipped": 0,
+      "threshold": 0.8800000000000003
+    },
+    {
+      "version": 2,
+      "label": "V2",
+      "description": "Dataset awal ditambah input IDE",
+      "status": "frozen",
+      "directory": "model_versions/V2",
+      "created_at": "2026-11-23T18:11:55+0700",
+      "parent_version": 1,
+      "training_rows": 37599,
+      "benchmark_rows": 16209,
+      "added_rows": 1,
+      "duplicates_skipped": 0,
+      "benchmark_overlap_skipped": 0,
+      "threshold": 0.9000000000000004
+    },
+    {
+      "version": 3,
+      "label": "V3",
+      "description": "Dataset awal ditambah input IDE",
+      "status": "frozen",
+      "directory": "model_versions/V3",
+      "created_at": "2026-11-23T18:12:41+0700",
+      "parent_version": 2,
+      "training_rows": 37659,
+      "benchmark_rows": 16209,
+      "added_rows": 60,
+      "duplicates_skipped": 0,
+      "benchmark_overlap_skipped": 0,
+      "threshold": 0.8600000000000003
+    }
+  ]
+}

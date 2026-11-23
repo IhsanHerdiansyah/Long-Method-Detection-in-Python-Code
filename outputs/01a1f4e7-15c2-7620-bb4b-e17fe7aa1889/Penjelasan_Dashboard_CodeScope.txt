@@ -1,0 +1,794 @@
+================================================================================
+PENJELASAN DASHBOARD CODESCOPE
+Deteksi Long Method pada Kode Python Menggunakan Decision Tree
+================================================================================
+
+Tujuan dokumen:
+Menjelaskan setiap bagian dashboard CodeScope agar mudah dipahami ketika
+digunakan untuk pengujian aplikasi dan bimbingan skripsi.
+
+Dashboard berfungsi sebagai alat screening atau penyaring awal. Dashboard
+membantu menemukan fungsi Python yang berpotensi memiliki Long Method.
+Hasil dashboard bukan penilaian mutlak bahwa kode pasti salah atau pasti
+berkualitas buruk.
+
+
+================================================================================
+1. ALUR KERJA APLIKASI
+================================================================================
+
+Alur analisis di dalam aplikasi:
+
+Kode Python
+    -> Analisis sintaks menggunakan AST
+    -> Ekstraksi tiga fitur statis
+    -> Klasifikasi menggunakan Decision Tree
+    -> Tampilan dashboard hasil
+
+Tiga fitur statis yang digunakan:
+
+1. Non-comment LOC
+2. Jumlah parameter
+3. Jumlah percabangan
+
+AST atau Abstract Syntax Tree adalah struktur internal Python yang menjelaskan
+fungsi, parameter, percabangan, perulangan, blok penanganan error, dan bagian
+lain dari kode.
+
+
+================================================================================
+2. BAGIAN ATAS: IDENTITAS APLIKASI
+================================================================================
+
+Bagian hero berwarna hijau berisi identitas aplikasi.
+
+CodeScope / Research Prototype
+    Nama aplikasi dan status bahwa aplikasi ini merupakan prototipe penelitian.
+
+Deteksi Long Method pada kode Python
+    Tujuan utama aplikasi, yaitu mengklasifikasikan fungsi Python yang
+    berpotensi memiliki Long Method.
+
+Python AST
+    Kode tidak dianalisis hanya berdasarkan jumlah karakter atau kata.
+    Aplikasi membaca struktur sintaks Python menggunakan modul ast.
+
+3 fitur statis
+    Model hanya menerima tiga fitur, yaitu LOC, jumlah parameter, dan jumlah
+    percabangan.
+
+Decision Tree
+    Algoritma machine learning yang digunakan untuk memprediksi kelas
+    Long Method atau bukan Long Method.
+
+Dashboard terpadu
+    Input, hasil analisis, penjelasan keputusan, dan evaluasi model ditampilkan
+    dalam satu halaman.
+
+
+================================================================================
+3. BAGIAN INPUT KODE
+================================================================================
+
+Bagian "Analisis kode Python" menerima:
+
+1. Satu fungsi Python.
+2. Beberapa fungsi dalam satu file.
+3. Satu atau beberapa method di dalam class.
+4. Cuplikan pernyataan Python tanpa deklarasi fungsi.
+
+Tombol contoh:
+
+Contoh pendek
+    Mengisi editor dengan fungsi pendek yang diprediksi tidak terindikasi
+    Long Method.
+
+Contoh panjang
+    Mengisi editor dengan fungsi panjang yang diprediksi terindikasi
+    Long Method.
+
+Kosongkan
+    Menghapus seluruh isi editor kode.
+
+Tombol "Analisis dan tampilkan dashboard"
+    Menjalankan analisis kode, mengekstraksi fitur, melakukan prediksi,
+    lalu memperbarui dashboard hasil.
+
+
+================================================================================
+4. KARTU MODEL AKTIF
+================================================================================
+
+Di sisi kanan editor terdapat tiga kartu informasi tentang model.
+
+
+--------------------------------------------------------------------------------
+4.1 Decision Tree: 71,2%
+--------------------------------------------------------------------------------
+
+Angka 71,2% adalah F1-score model pada data uji. Data uji diambil dari
+repository yang tidak digunakan saat pelatihan model.
+
+F1-score digunakan karena jumlah data Long Method jauh lebih sedikit
+dibandingkan data negatif. Jika hanya melihat accuracy, model bisa terlihat
+sangat baik walaupun gagal menemukan sebagian besar Long Method.
+
+F1-score menggabungkan:
+
+1. Precision, yaitu ketepatan prediksi positif.
+2. Recall, yaitu kemampuan menemukan seluruh data positif.
+
+Model ini memiliki recall lebih tinggi daripada precision. Artinya, model
+cenderung lebih agresif memberi peringatan agar kasus Long Method tidak
+terlewat.
+
+
+--------------------------------------------------------------------------------
+4.2 Threshold klasifikasi: 88,00%
+--------------------------------------------------------------------------------
+
+Threshold adalah batas probabilitas untuk menentukan kelas akhir.
+
+Aturan keputusan:
+
+- Probabilitas >= 88,00% -> Terindikasi Long Method
+- Probabilitas < 88,00%  -> Tidak terindikasi
+
+Contoh:
+
+- Probabilitas 90,65% -> terindikasi.
+- Probabilitas 70,00% -> tidak terindikasi.
+
+Threshold 88,00% tidak dipilih secara manual. Nilai tersebut dipilih dari
+prediksi out-of-fold pada data latih untuk memperoleh F1-score terbaik.
+
+
+--------------------------------------------------------------------------------
+4.3 Fitur input
+--------------------------------------------------------------------------------
+
+Model hanya menggunakan tiga fitur:
+
+1. LOC
+2. Parameter
+3. Percabangan
+
+Model tidak membaca nama fungsi, komentar, isi string, atau kemiripan dengan
+kode tertentu. Prediksi dibuat berdasarkan tiga fitur statis tersebut.
+
+
+================================================================================
+5. BANNER KEPUTUSAN
+================================================================================
+
+Contoh isi banner:
+
+"Dashboard hasil analisis"
+"1 dari 1 fungsi melewati threshold model."
+
+Artinya:
+
+1. Aplikasi menemukan satu fungsi.
+2. Probabilitas fungsi tersebut lebih besar atau sama dengan threshold.
+3. Fungsi dikelompokkan sebagai Terindikasi Long Method.
+
+Label PERLU DITINJAU memiliki arti:
+
+1. Model menemukan indikasi Long Method.
+2. Kode perlu diperiksa oleh manusia.
+3. Hasil bukan bukti bahwa kode pasti salah.
+
+Jika tidak ada fungsi yang melewati threshold, banner akan menampilkan
+"TIDAK TERINDIKASI".
+
+
+================================================================================
+6. EMPAT KARTU RINGKASAN HASIL
+================================================================================
+
+
+--------------------------------------------------------------------------------
+6.1 Fungsi dianalisis
+--------------------------------------------------------------------------------
+
+Jumlah fungsi atau method yang berhasil dikenali oleh AST.
+
+Contoh:
+
+- Satu fungsi biasa menghasilkan nilai 1.
+- Satu class dengan tiga method menghasilkan nilai 3.
+- Dua top-level function menghasilkan nilai 2.
+
+
+--------------------------------------------------------------------------------
+6.2 Terindikasi
+--------------------------------------------------------------------------------
+
+Jumlah fungsi yang probabilitas Long Method-nya lebih besar atau sama dengan
+threshold.
+
+Contoh:
+
+Jika terdapat lima fungsi dan dua fungsi memiliki probabilitas minimal 88%,
+kartu Terindikasi menampilkan nilai 2.
+
+
+--------------------------------------------------------------------------------
+6.3 Tidak terindikasi
+--------------------------------------------------------------------------------
+
+Jumlah fungsi yang probabilitas Long Method-nya masih di bawah threshold.
+
+Rumus sederhananya:
+
+Tidak terindikasi = Fungsi dianalisis - Terindikasi
+
+
+--------------------------------------------------------------------------------
+6.4 Probabilitas tertinggi
+--------------------------------------------------------------------------------
+
+Nilai probabilitas paling tinggi dari seluruh fungsi yang dianalisis.
+
+Contoh:
+
+Fungsi A = 35,00%
+Fungsi B = 90,65%
+Fungsi C = 20,00%
+
+Probabilitas tertinggi yang ditampilkan adalah 90,65%.
+
+Kartu ini berguna ketika pengguna memasukkan banyak fungsi sekaligus.
+
+
+================================================================================
+7. KOMPOSISI PREDIKSI
+================================================================================
+
+Diagram donat menunjukkan perbandingan:
+
+1. Jumlah fungsi yang terindikasi.
+2. Jumlah fungsi yang tidak terindikasi.
+
+Contoh:
+
+- 1 fungsi terindikasi.
+- 0 fungsi tidak terindikasi.
+
+Diagram akan memperlihatkan bagian merah penuh dan angka 1 di tengah.
+
+Diagram ini membantu ketika banyak fungsi dimasukkan sekaligus. Pengguna dapat
+langsung melihat apakah sebagian besar kode aman atau sebagian besar kode
+memerlukan peninjauan.
+
+
+================================================================================
+8. PROBABILITAS PER FUNGSI
+================================================================================
+
+Diagram batang horizontal menunjukkan probabilitas setiap fungsi.
+
+Komponen diagram:
+
+- Nama fungsi ditampilkan di sisi kiri.
+- Probabilitas ditampilkan dalam persen.
+- Batang merah menunjukkan fungsi yang terindikasi.
+- Batang hijau menunjukkan fungsi yang tidak terindikasi.
+
+Semakin panjang batang, semakin besar kecenderungan model menyebut fungsi
+tersebut sebagai Long Method.
+
+Pada contoh screenshot, fungsi "proses_pesanan" memiliki probabilitas sekitar
+90,7%. Karena nilai tersebut lebih besar daripada threshold 88%, fungsi
+dinyatakan terindikasi.
+
+
+================================================================================
+9. TABEL RINCIAN FUNGSI
+================================================================================
+
+Tabel berisi informasi per fungsi.
+
+
+--------------------------------------------------------------------------------
+9.1 Fungsi
+--------------------------------------------------------------------------------
+
+Nama fungsi atau method yang ditemukan oleh AST.
+
+Contoh:
+
+- proses_pesanan
+- OrderService.process
+- hitung_diskon
+
+
+--------------------------------------------------------------------------------
+9.2 Baris
+--------------------------------------------------------------------------------
+
+Rentang baris tempat fungsi berada di editor.
+
+Contoh:
+
+Baris 1-82
+
+Artinya fungsi dimulai pada baris ke-1 dan berakhir pada baris ke-82.
+
+
+--------------------------------------------------------------------------------
+9.3 Prediksi
+--------------------------------------------------------------------------------
+
+Hasil klasifikasi akhir, yaitu:
+
+- Terindikasi Long Method
+- Tidak terindikasi
+
+Prediksi dibentuk dengan membandingkan probabilitas model dan threshold.
+
+
+--------------------------------------------------------------------------------
+9.4 Probabilitas
+--------------------------------------------------------------------------------
+
+Skor keluaran Decision Tree.
+
+Contoh:
+
+0,9065 berarti peluang keluaran model untuk kelas Long Method sekitar 90,65%.
+
+Probabilitas adalah skor model, bukan persentase kepastian ilmiah.
+
+
+--------------------------------------------------------------------------------
+9.5 LOC
+--------------------------------------------------------------------------------
+
+LOC adalah jumlah baris fisik yang mengandung token kode.
+
+Baris berikut tidak dihitung:
+
+- baris kosong,
+- baris komentar,
+- baris yang hanya berisi indentasi.
+
+Contoh pada screenshot:
+
+LOC = 66
+
+Artinya terdapat 66 baris bermakna di dalam fungsi.
+
+
+--------------------------------------------------------------------------------
+9.6 Parameter
+--------------------------------------------------------------------------------
+
+Jumlah parameter pada definisi fungsi.
+
+Perhitungan mencakup:
+
+- parameter posisi,
+- parameter dengan nilai default,
+- keyword-only argument,
+- *args,
+- **kwargs,
+- self pada method.
+
+Parameter yang banyak tidak otomatis berarti kode salah, tetapi dapat membuat
+fungsi lebih sulit dipanggil, diuji, dan dipelihara.
+
+
+--------------------------------------------------------------------------------
+9.7 Percabangan
+--------------------------------------------------------------------------------
+
+Jumlah kontrol keputusan atau jalur alternatif di dalam fungsi.
+
+Unsur yang dihitung meliputi:
+
+- if
+- for
+- while
+- except
+- ekspresi if ... else
+- match case
+- comprehension
+- tambahan cabang dari operasi boolean and atau or
+
+Percabangan yang tinggi menunjukkan bahwa fungsi memiliki banyak kemungkinan
+jalur eksekusi.
+
+
+================================================================================
+10. PENJELASAN BARIS 1-82 DAN LOC 66
+================================================================================
+
+Dua informasi ini memiliki arti berbeda.
+
+Baris 1-82:
+    Posisi fungsi di editor, dari baris pertama sampai baris ke-82.
+
+LOC 66:
+    Jumlah baris yang mengandung token kode setelah baris kosong dan komentar
+    tidak dihitung.
+
+Fungsi dapat menempati 82 baris fisik tetapi hanya memiliki LOC 66 karena ada:
+
+- baris kosong,
+- komentar,
+- baris yang hanya berisi kurung,
+- lanjutan indentasi,
+- format penulisan multi-baris.
+
+
+================================================================================
+11. RINCIAN FITUR SETELAH TABEL DIBUKA
+================================================================================
+
+Saat expander fungsi dibuka, muncul tiga kotak fitur.
+
+
+--------------------------------------------------------------------------------
+11.1 Non-comment LOC
+--------------------------------------------------------------------------------
+
+Menunjukkan panjang fungsi berdasarkan baris yang benar-benar mengandung kode.
+
+Contoh:
+
+Non-comment LOC = 66
+
+Artinya fungsi tersebut cukup panjang.
+
+
+--------------------------------------------------------------------------------
+11.2 Jumlah parameter
+--------------------------------------------------------------------------------
+
+Menunjukkan banyak parameter yang diterima fungsi.
+
+Contoh:
+
+Jumlah parameter = 5
+
+Artinya fungsi menerima lima parameter, termasuk self jika fungsi merupakan
+method.
+
+
+--------------------------------------------------------------------------------
+11.3 Jumlah percabangan
+--------------------------------------------------------------------------------
+
+Menunjukkan banyak jalur keputusan di dalam fungsi.
+
+Contoh:
+
+Jumlah percabangan = 19
+
+Artinya fungsi memiliki cukup banyak kondisi, perulangan, atau jalur eksekusi.
+
+
+================================================================================
+12. JALUR KEPUTUSAN MODEL
+================================================================================
+
+Bagian ini menunjukkan aturan yang dilalui Decision Tree sampai menghasilkan
+prediksi.
+
+Contoh jalur pada screenshot:
+
+1. Non-comment LOC > 51,50
+2. Non-comment LOC > 57,50
+3. Jumlah percabangan > 14,50
+4. Non-comment LOC <= 78,50
+5. Jumlah percabangan <= 20,50
+
+Maksud sederhananya:
+
+Jika LOC lebih dari 51,50,
+lalu LOC lebih dari 57,50,
+dan percabangan lebih dari 14,50,
+tetapi LOC masih maksimal 78,50
+serta percabangan maksimal 20,50,
+maka model mengikuti cabang menuju prediksi Long Method.
+
+Fungsi pada screenshot memiliki:
+
+- LOC = 66, sehingga memenuhi aturan LOC > 51,50 dan > 57,50.
+- Percabangan = 19, sehingga memenuhi aturan > 14,50 dan <= 20,50.
+- LOC = 66 <= 78,50, sehingga memenuhi aturan batas atas.
+
+Karena seluruh kondisi sesuai, model berakhir pada leaf dengan probabilitas
+sekitar 90,65%.
+
+Angka 51,50, 57,50, 14,50, 78,50, dan 20,50 adalah batas internal yang
+dipelajari Decision Tree dari data. Angka tersebut bukan standar resmi Python.
+
+
+================================================================================
+13. SARAN PENINJAUAN
+================================================================================
+
+Dashboard menampilkan saran yang dipengaruhi oleh fitur paling menonjol.
+
+Contoh:
+
+"Pecah metode panjang menjadi fungsi dengan satu tanggung jawab."
+
+Saran tersebut terutama dipicu oleh LOC yang tinggi dan percabangan yang banyak.
+
+Fungsi "proses_pesanan" secara konseptual dapat dipecah menjadi:
+
+1. Fungsi untuk menghitung harga item.
+2. Fungsi untuk menghitung diskon.
+3. Fungsi untuk menghitung pajak.
+4. Fungsi untuk menghitung ongkos kirim.
+5. Fungsi untuk menentukan status pembayaran.
+6. Fungsi untuk membuat ringkasan pesanan.
+
+Setiap fungsi baru sebaiknya memiliki satu tanggung jawab utama dan dapat
+diuji secara terpisah.
+
+
+================================================================================
+14. TOMBOL UNDUH HASIL JSON
+================================================================================
+
+Tombol ini mengunduh hasil analisis dalam format JSON.
+
+Informasi yang dapat disimpan:
+
+- nama fungsi,
+- rentang baris,
+- tiga nilai fitur,
+- probabilitas,
+- prediksi,
+- aturan jalur keputusan,
+- saran peninjauan.
+
+Format JSON berguna untuk:
+
+1. Menyimpan hasil pengujian.
+2. Mengolah hasil menggunakan program lain.
+3. Melampirkan bukti pengujian ke laporan penelitian.
+
+
+================================================================================
+15. EVALUASI MODEL DAN KUALITAS DATASET
+================================================================================
+
+Bagian ini dapat dibuka melalui expander di bawah hasil analisis.
+
+
+--------------------------------------------------------------------------------
+15.1 Precision: 0,618
+--------------------------------------------------------------------------------
+
+Dari seluruh fungsi yang diprediksi terindikasi Long Method, sekitar 61,8%
+benar-benar berlabel Long Method.
+
+Rumus:
+
+Precision = Prediksi positif yang benar / Seluruh prediksi positif
+
+Interpretasi:
+
+- Model lebih sering menandai fungsi dibandingkan jumlah fungsi yang benar-benar
+  Long Method.
+- Sebagian peringatan mungkin merupakan false positive.
+
+
+--------------------------------------------------------------------------------
+15.2 Recall: 0,839
+--------------------------------------------------------------------------------
+
+Dari seluruh fungsi yang sebenarnya berlabel Long Method, model berhasil
+menemukan sekitar 83,9%.
+
+Rumus:
+
+Recall = Long Method yang ditemukan / Seluruh Long Method
+
+Interpretasi:
+
+- Model cukup baik dalam mencegah Long Method terlewat.
+- Sekitar 16,1% Long Method pada data uji tidak ditemukan.
+
+
+--------------------------------------------------------------------------------
+15.3 F1-score: 0,712
+--------------------------------------------------------------------------------
+
+F1-score adalah keseimbangan antara precision dan recall.
+
+Nilai 0,712 berarti model memperoleh kompromi yang cukup baik antara:
+
+- jumlah peringatan palsu,
+- jumlah Long Method yang berhasil ditemukan.
+
+F1-score menjadi metrik utama karena jumlah Long Method jauh lebih sedikit
+daripada kelas negatif.
+
+
+--------------------------------------------------------------------------------
+15.4 ROC-AUC: 0,989
+--------------------------------------------------------------------------------
+
+ROC-AUC mengukur kemampuan model mengurutkan fungsi berisiko tinggi di atas
+fungsi berisiko rendah.
+
+Nilai 0,989 menunjukkan pemisahan dua kelas sangat baik.
+
+Penting:
+
+ROC-AUC 0,989 bukan berarti accuracy model 98,9%.
+Accuracy model berada pada nilai 0,970 atau sekitar 97,0%.
+
+
+--------------------------------------------------------------------------------
+15.5 Accuracy: 0,970
+--------------------------------------------------------------------------------
+
+Accuracy adalah proporsi seluruh prediksi yang benar.
+
+Accuracy terlihat tinggi karena jumlah data negatif jauh lebih banyak daripada
+data positif. Oleh karena itu, accuracy tidak boleh dijadikan satu-satunya
+metrik evaluasi.
+
+
+--------------------------------------------------------------------------------
+15.6 Threshold F1: 88%
+--------------------------------------------------------------------------------
+
+Threshold yang dipilih untuk memperoleh F1-score terbaik pada data latih
+out-of-fold.
+
+Threshold ini menentukan kapan probabilitas model dianggap sebagai prediksi
+Long Method.
+
+
+================================================================================
+16. KONTRIBUSI FITUR
+================================================================================
+
+Dashboard menampilkan kontribusi setiap fitur.
+
+Fitur                    Kontribusi
+Non-comment LOC          98,1%
+Jumlah parameter          0,7%
+Jumlah percabangan        1,3%
+
+Interpretasi:
+
+1. Decision Tree paling sering menggunakan LOC untuk membedakan fungsi panjang
+   dan pendek.
+2. Jumlah parameter dan percabangan tetap digunakan pada beberapa cabang pohon.
+3. Kontribusi fitur tidak berarti fitur lain diabaikan sepenuhnya.
+
+
+================================================================================
+17. CONFUSION MATRIX
+================================================================================
+
+Confusion matrix menunjukkan empat kemungkinan hasil pada data uji.
+
+Kategori                     Jumlah       Arti
+Benar negatif                15.134       Fungsi biasa dengan benar tidak ditandai.
+Salah positif                   367       Fungsi biasa yang keliru ditandai.
+Salah negatif                   114       Long Method yang terlewat.
+Benar positif                   594       Long Method yang berhasil ditemukan.
+
+Interpretasi:
+
+- Model lebih banyak memberi peringatan palsu daripada melewatkan Long Method.
+- Perilaku ini sesuai untuk alat screening.
+- Pengguna tetap harus meninjau hasil prediksi secara manual.
+
+
+================================================================================
+18. JEJAK PEMBERSIHAN DATASET
+================================================================================
+
+
+--------------------------------------------------------------------------------
+18.1 Baris mentah: 156.151
+--------------------------------------------------------------------------------
+
+Jumlah pesan code smell pada dataset Pylint awal.
+
+Satu fungsi dapat muncul lebih dari sekali karena memiliki beberapa pesan code
+smell. Karena itu, data mentah tidak bisa langsung dipakai untuk melatih model.
+
+
+--------------------------------------------------------------------------------
+18.2 Duplikasi dihapus: 102.338
+--------------------------------------------------------------------------------
+
+Jumlah baris pengulangan yang dihapus.
+
+Tujuan pembersihan:
+
+- mencegah satu fungsi dihitung berkali-kali,
+- mengurangi bias kelas,
+- mencegah data yang sama muncul pada data latih dan data uji,
+- menghasilkan satu record untuk satu kode unik.
+
+
+--------------------------------------------------------------------------------
+18.3 Dataset bersih: 53.807
+--------------------------------------------------------------------------------
+
+Jumlah fungsi unik yang siap digunakan untuk pelatihan dan evaluasi.
+
+Komposisi label:
+
+- Long Method positif: 4.119
+- Tidak terindikasi: 49.688
+- Proporsi positif: 7,66%
+
+
+--------------------------------------------------------------------------------
+18.4 Repository: 118
+--------------------------------------------------------------------------------
+
+Dataset berasal dari 118 repository publik.
+
+Repository digunakan sebagai kelompok ketika membagi data:
+
+- Data latih: 94 repository.
+- Data uji: 24 repository.
+
+Tujuan pemisahan berdasarkan repository adalah mencegah kebocoran data.
+Kode dari repository yang sama tidak boleh muncul di data latih dan data uji
+secara bersamaan.
+
+
+================================================================================
+19. CARA MEMBACA HASIL PADA SCREENSHOT
+================================================================================
+
+Hasil pada screenshot dapat dibaca dengan urutan berikut:
+
+1. Aplikasi menemukan satu fungsi bernama proses_pesanan.
+2. Fungsi berada pada baris 1-82.
+3. Fungsi memiliki 66 baris kode bermakna atau Non-comment LOC.
+4. Fungsi memiliki 5 parameter.
+5. Fungsi memiliki 19 percabangan.
+6. Decision Tree mengikuti lima aturan jalur keputusan.
+7. Probabilitas prediksi Long Method adalah 90,65%.
+8. Threshold model adalah 88,00%.
+9. Karena 90,65% lebih besar daripada 88,00%, fungsi terindikasi Long Method.
+10. Label PERLU DITINJAU berarti kode perlu diperiksa, bukan otomatis
+    dinyatakan salah.
+11. Saran utamanya adalah memecah fungsi panjang menjadi beberapa fungsi kecil.
+
+
+================================================================================
+20. KESIMPULAN
+================================================================================
+
+Dashboard CodeScope menampilkan hasil klasifikasi dan alasan di balik prediksi.
+
+Informasi utama yang perlu diperhatikan:
+
+1. Prediksi akhir.
+2. Probabilitas model.
+3. Nilai LOC, parameter, dan percabangan.
+4. Jalur keputusan Decision Tree.
+5. Saran perbaikan.
+6. Evaluasi model.
+7. Bukti pembersihan dataset.
+
+Prediksi Terindikasi Long Method berarti fungsi memiliki pola yang mirip dengan
+Long Method pada data latih. Hasil tersebut sebaiknya digunakan untuk menentukan
+fungsi mana yang perlu ditinjau terlebih dahulu.
+
+Pada contoh screenshot, proses_pesanan mendapat probabilitas 90,65%. Angka itu
+melewati threshold 88%, sehingga aplikasi menampilkan status
+"Terindikasi Long Method" dan menyarankan pemecahan fungsi.
+
+
+================================================================================
+AKHIR DOKUMEN
+================================================================================

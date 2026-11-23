@@ -1,0 +1,10 @@
+.venv/
+.artifact-runtime/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.streamlit/secrets.toml
+tmp/
+data/raw/
+*.inspect.ndjson
+

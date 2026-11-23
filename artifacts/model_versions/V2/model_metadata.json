@@ -1,0 +1,17 @@
+{
+  "model_name": "Decision Tree - Long Method",
+  "model_type": "DecisionTreeClassifier",
+  "feature_names": [
+    "nloc",
+    "parameter_count",
+    "branch_count"
+  ],
+  "threshold": 0.9000000000000004,
+  "trained_at": "2026-11-23T18:11:55+0700",
+  "dataset_rows": 53808,
+  "training_seconds": 1.433,
+  "split_protocol": "Model baru dilatih pada snapshot data awal ditambah input IDE. Seluruh versi dievaluasi pada benchmark repository holdout yang sama.",
+  "version": 2,
+  "parent_version": 1,
+  "training_additions": 1
+}

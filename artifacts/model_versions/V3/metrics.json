@@ -1,0 +1,257 @@
+{
+  "metrics": {
+    "precision": 0.612410986775178,
+    "recall": 0.8502824858757062,
+    "f1_score": 0.7120047309284447,
+    "accuracy": 0.9699549632919983,
+    "roc_auc": 0.9893686920872975,
+    "pr_auc": 0.752772166545291,
+    "confusion_matrix": {
+      "true_negative": 15120,
+      "false_positive": 381,
+      "false_negative": 106,
+      "true_positive": 602
+    },
+    "classification_report": {
+      "Tidak terindikasi": {
+        "precision": 0.9930382240903717,
+        "recall": 0.9754209405844784,
+        "f1-score": 0.9841507469001204,
+        "support": 15501.0
+      },
+      "Long Method": {
+        "precision": 0.612410986775178,
+        "recall": 0.8502824858757062,
+        "f1-score": 0.7120047309284447,
+        "support": 708.0
+      },
+      "accuracy": 0.9699549632919983,
+      "macro avg": {
+        "precision": 0.8027246054327748,
+        "recall": 0.9128517132300923,
+        "f1-score": 0.8480777389142826,
+        "support": 16209.0
+      },
+      "weighted avg": {
+        "precision": 0.9764126405245035,
+        "recall": 0.9699549632919983,
+        "f1-score": 0.9722635620455368,
+        "support": 16209.0
+      }
+    },
+    "threshold": 0.8600000000000003,
+    "best_parameters": {
+      "max_depth": 5,
+      "min_samples_leaf": 10,
+      "class_weight": "balanced",
+      "criterion": "gini"
+    },
+    "cv_f1_at_default_threshold": 0.7770951663382404,
+    "cv_f1_at_selected_threshold": 0.81462562172335,
+    "threshold_selection": "Threshold V baru dipilih hanya dari out-of-fold snapshot data latih kumulatif. Data benchmark tidak dipakai untuk kalibrasi.",
+    "training_metrics": {
+      "precision": 0.78259766615931,
+      "recall": 0.8968023255813954,
+      "f1_score": 0.8358168518016797,
+      "accuracy": 0.9678164582171592,
+      "roc_auc": 0.9911279356905622,
+      "pr_auc": 0.8949955306198033,
+      "confusion_matrix": {
+        "true_negative": 33362,
+        "false_positive": 857,
+        "false_negative": 355,
+        "true_positive": 3085
+      },
+      "classification_report": {
+        "Tidak terindikasi": {
+          "precision": 0.9894711866417534,
+          "recall": 0.9749554341155499,
+          "f1-score": 0.9821596796985398,
+          "support": 34219.0
+        },
+        "Long Method": {
+          "precision": 0.78259766615931,
+          "recall": 0.8968023255813954,
+          "f1-score": 0.8358168518016797,
+          "support": 3440.0
+        },
+        "accuracy": 0.9678164582171592,
+        "macro avg": {
+          "precision": 0.8860344264005318,
+          "recall": 0.9358788798484726,
+          "f1-score": 0.9089882657501098,
+          "support": 37659.0
+        },
+        "weighted avg": {
+          "precision": 0.9705741126233354,
+          "recall": 0.9678164582171592,
+          "f1-score": 0.9687918439098785,
+          "support": 37659.0
+        }
+      }
+    },
+    "testing_metrics": {
+      "precision": 0.612410986775178,
+      "recall": 0.8502824858757062,
+      "f1_score": 0.7120047309284447,
+      "accuracy": 0.9699549632919983,
+      "roc_auc": 0.9893686920872975,
+      "pr_auc": 0.752772166545291,
+      "confusion_matrix": {
+        "true_negative": 15120,
+        "false_positive": 381,
+        "false_negative": 106,
+        "true_positive": 602
+      },
+      "classification_report": {
+        "Tidak terindikasi": {
+          "precision": 0.9930382240903717,
+          "recall": 0.9754209405844784,
+          "f1-score": 0.9841507469001204,
+          "support": 15501.0
+        },
+        "Long Method": {
+          "precision": 0.612410986775178,
+          "recall": 0.8502824858757062,
+          "f1-score": 0.7120047309284447,
+          "support": 708.0
+        },
+        "accuracy": 0.9699549632919983,
+        "macro avg": {
+          "precision": 0.8027246054327748,
+          "recall": 0.9128517132300923,
+          "f1-score": 0.8480777389142826,
+          "support": 16209.0
+        },
+        "weighted avg": {
+          "precision": 0.9764126405245035,
+          "recall": 0.9699549632919983,
+          "f1-score": 0.9722635620455368,
+          "support": 16209.0
+        }
+      }
+    }
+  },
+  "dataset": {
+    "rows": 53868,
+    "positive_rows": 4148,
+    "negative_rows": 49720,
+    "positive_rate": 0.07700304447909705,
+    "repositories": 120,
+    "train_rows": 37659,
+    "test_rows": 16209,
+    "train_repositories": 96,
+    "test_repositories": 24,
+    "positive_feature_means": {
+      "nloc": 137.183,
+      "parameter_count": 2.193,
+      "branch_count": 28.787
+    },
+    "negative_feature_means": {
+      "nloc": 20.008,
+      "parameter_count": 2.218,
+      "branch_count": 2.898
+    },
+    "feature_histograms": {
+      "nloc": {
+        "edges": [
+          1.0,
+          572.583,
+          1144.167,
+          1715.75,
+          2287.333,
+          2858.917,
+          3430.5,
+          4002.083,
+          4573.667,
+          5145.25,
+          5716.833,
+          6288.417,
+          6860.0
+        ],
+        "counts": [
+          53804,
+          62,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ]
+      },
+      "parameter_count": {
+        "edges": [
+          0.0,
+          1.667,
+          3.333,
+          5.0,
+          6.667,
+          8.333,
+          10.0,
+          11.667,
+          13.333,
+          15.0,
+          16.667,
+          18.333,
+          20.0
+        ],
+        "counts": [
+          25453,
+          18383,
+          3975,
+          3768,
+          1681,
+          226,
+          163,
+          79,
+          73,
+          45,
+          6,
+          16
+        ]
+      },
+      "branch_count": {
+        "edges": [
+          0.0,
+          17.417,
+          34.833,
+          52.25,
+          69.667,
+          87.083,
+          104.5,
+          121.917,
+          139.333,
+          156.75,
+          174.167,
+          191.583,
+          209.0
+        ],
+        "counts": [
+          50244,
+          2722,
+          500,
+          90,
+          81,
+          113,
+          12,
+          19,
+          22,
+          15,
+          39,
+          11
+        ]
+      }
+    },
+    "feature_importances": {
+      "nloc": 0.9810416458886002,
+      "parameter_count": 0.006527927462727193,
+      "branch_count": 0.012430426648672527
+    },
+    "split_protocol": "Model baru dilatih pada snapshot data awal ditambah input IDE. Seluruh versi dievaluasi pada benchmark repository holdout yang sama."
+  }
+}
